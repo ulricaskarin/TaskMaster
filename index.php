@@ -10,6 +10,13 @@
 require_once('_env.php');
 require_once(ROOT_PATH .'/app/_config/_autoload.php');
 echo 'This is Task Master';
-$task = new models\Task();
-$task->create('This is my title', 'Content comes here', 1);
-var_dump($task);
+
+try {
+  $task = new models\Task();
+  $task->create('Content comes here', 1);
+} catch (\Exception $e) {
+  echo $e->errorMessage();
+}
+// $task = new models\Task();
+// $task->create( 'Content comes here', 1);
+// var_dump($task);

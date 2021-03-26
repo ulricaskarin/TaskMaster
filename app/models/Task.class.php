@@ -27,7 +27,7 @@
      assert(is_string($title) && is_string($content) && is_int($priority));
 
      if(empty($title)) {
-       //TODO Throw new custom exception!
+       throw new \exceptions\MissingTitleException();
        echo 'empty title';
      } else if(empty($content)) {
        //TODO Throw new custom exception!
