@@ -121,4 +121,24 @@
       $this->error = $e->getMessage();
     }
   }
+
+  /**
+   * Fetch a single row as a result of a query.
+   * @return array - associative array
+   */
+  public function result()
+  {
+    $this->execute();
+    return $this->statment->fetch(PDO::FETCH_ASSOC);
+  }
+
+  /**
+   * Fetch a set of rows as a result of a query.
+   * @return array - associative array
+   */
+  public function resultSet()
+  {
+    $this->execute();
+    return $this->statement->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
