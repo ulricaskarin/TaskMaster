@@ -141,4 +141,29 @@
     $this->execute();
     return $this->statement->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  /**
+   * Get the row count of the statement.
+   */
+  public function rowCount()
+  {
+    return $this->statement->rowCount();
+  }
+
+  /**
+   * Get the id of the last inserted item into the database.
+   * @return [type] [description]
+   */
+  public function lastInsertId()
+  {
+    return $this->handler->lastInsertId();
+  }
+
+  /**
+   * Disconnects from the database.
+   */
+  public function disconnect()
+  {
+    $this->handler = null;
+  }
 }
