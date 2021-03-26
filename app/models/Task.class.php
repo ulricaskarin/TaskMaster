@@ -29,7 +29,7 @@
      if(empty($title)) {
        throw new \exceptions\MissingTitleException();
      } else if(empty($content)) {
-       //TODO Throw new custom exception!
+       throw new \exceptions\MissingContentException();
        echo 'empty content';
      } else if (empty($priority)) {
         //TODO Throw new custom exception!
