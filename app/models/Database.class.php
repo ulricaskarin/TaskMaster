@@ -28,48 +28,97 @@
  use PDO;
 
  class Database
- {
-   /**
-    * Private properties for database access
-    * using secretly defined constants
-    */
-     private $host = DB_HOST;
-     private $user = DB_USER;
-     private $pass = DB_PASS;
-     private $dbname = DB_NAME;
+{
 
-     /**
-      * Handler -> the PDO instance.
-      * Representing the connection to the database.
-      * @var PDO
+  /**
+  * Private properties for database access
+  * using secretly defined constants
+  */
+  private $host = DB_HOST;
+  private $user = DB_USER;
+  private $pass = DB_PASS;
+  private $dbname = DB_NAME;
+
+  /**
+  * Handler -> the PDO instance.
+  * Representing the connection to the database.
+  * @var PDO
+  */
+  private $handler;
+
+  private $error;
+
+  private $statement;
+
+  /**
+  * Initialize PDO connection. Set the handler as
+  * the new instance to be used throughout each additional
+  * methods.
+  *
+  * @throws PDOException - if failing to create PDO object.
       */
-     private $handler;
+  public function __construct()
+  {
+   $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
+   $options = [
+    PDO::ATTR_PERSISTENT => true,
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+   ];
 
-     private $error;
+   try {
+     $this->handler = new PDO($dsn, $this->user, $this->pass, $options);
+   } catch (PDOException $e) {
+     $this->error = $e->getMessage();
+   }
+  }
 
-     private $statement;
+  /**
+  * Prepares the statement as protection against SQL-injections.
+  * @param  string $query
+  */
+  public function query(string $query)
+  {
+    $this->statement = $this->handler->prepare($query);
+  }
 
-     /**
-      * Initialize PDO connection. Set the handler as
-      * the new instance to be used throughout each additional
-      * methods.
-      *
-      * @throws PDOException - if failing to create PDO object.
-      */
-     public function __construct()
-     {
-       $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
-      $options = [
-        PDO::ATTR_PERSISTENT => true,
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
-      ];
+  /**
+   * Bind the variables to the proper type.
+   * Allows for integer, string, null and boolean.
+   */
+  public function bind($param, $value, $type = null)
+  {
+    if (is_null($type)) {
+      switch (true) {
+        case is_int($value):
+        $type = PDO::PARAM_INT;
+        break;
 
-      try {
-        $this->handler = new PDO($dsn, $this->user, $this->pass, $options);
-      } catch (PDOException $e) {
-        $this->error = $e->getMessage();
+        case is_bool($value):
+        $type = PDO::PARAM_BOOL;
+        break;
 
+        case is_null($value):
+        $type = PDO::PARAM_NULL;
+        break;
+        default:
+        $type = PDO::PARAM_STR;
       }
-     }
- }
+    }
+    $this->statement->bindValue($param, $value, $type);
+  }
+
+  /**
+   * Executes the prepared statement.
+   *
+   * @throws PDOException - if failing to execute.
+   */
+  public function execute()
+  {
+    try {
+      return $this->statement->execute();
+    } catch (PDOException $e) {
+      $this->error = $e->getMessage();
+    }
+  }
+}
