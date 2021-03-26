@@ -5,8 +5,6 @@
  * A custom exception message when title is missing.
  * Extends Exception class.
  *
- *
- *
  * @author: ulricaskarin
  * @version 1.0.0
  */

@@ -28,7 +28,6 @@
 
      if(empty($title)) {
        throw new \exceptions\MissingTitleException();
-       echo 'empty title';
      } else if(empty($content)) {
        //TODO Throw new custom exception!
        echo 'empty content';
