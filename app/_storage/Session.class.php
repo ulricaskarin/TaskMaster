@@ -27,7 +27,6 @@ class Session
   {
     if (session_status() === PHP_SESSION_NONE) {
       self::setIniSessionSettings();
-      self::setSessionCookieParams();
       session_start();
     }
   }
