@@ -65,6 +65,31 @@ class TaskView
     return isset($_GET["hide"]) ? true : false;
   }
 
+/**
+ * Renders Form for adding of Task.
+ * When rendered - a button to hide the form is shown to user.
+ * @return string
+ */
+  public function renderAddForm() : string
+  {
+    return
+
+    self::renderHideButton().
+    '
+    <form action="post">
+      <label for="title">Title:</label><br>
+      <input type="text" name="title" value=""><br>
+      <label for="content">Content:</label><br>
+      <input type="text" name="content" value=""><br><br>
+      <input type="radio" name="highpriority" value="1" name="prio">
+      <label for="highpriority">High Priority</label>
+      <input type="radio" name="lowpriority" value="2" name="prio">
+      <label for="lowpriority">Low Priority</label>
+      <input type="submit" value="Submit">
+     </form>
+    ';
+  }
+
   /**
    * Renders complete page to user
    *
