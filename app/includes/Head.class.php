@@ -21,7 +21,7 @@ class Head
   /**
    * Renders <head> on all pages where included.
    * Starts with Doctype declaration and ends with opening body tag.
-   * @return [type] [description]
+   * @return string
    */
   public static function renderHead()
   {
