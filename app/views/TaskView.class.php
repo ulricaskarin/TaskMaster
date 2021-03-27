@@ -101,6 +101,20 @@ class TaskView
   }
 
   /**
+   * Serves the correct view to the user based on user action.
+   * If 'Add Button' is clicked -> shows 'Add Task Form'
+   * If not --> shows all Tasks and 'Add button'.
+   * @return string
+   */
+  public function responseView() : string
+  {
+    $output='';
+
+    $this->isAddButtonClicked() ? $output = $this->renderForm()
+    : $output = $this->renderTasks();
+  }
+
+  /**
    * Renders complete page to user
    *
    * @return
