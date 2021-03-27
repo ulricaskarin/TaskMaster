@@ -34,8 +34,7 @@
      } else if (empty($priority)) {
         throw new \exceptions\MissingPriorityException();
      } else if ($title !== strip_tags($title) || $content !== strip_tags($content)){
-        //TODO Throw new custom exception!
-        echo 'invalid chars';
+        throw new \exceptions\InvalidCharactersException();
      }
 
      // Insert data in table [tasks]
