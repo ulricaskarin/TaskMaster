@@ -11,10 +11,8 @@ require_once('_env.php');
 require_once(ROOT_PATH .'/app/_config/_autoload.php');
 
 try {
-  $taskModel = new models\Task();
-  $taskView = new views\TaskView();
-  $taskControl = new controllers\TaskController($taskModel, $taskView);
-  $taskView->renderHTML();
+  $masterControl = new controllers\MasterController();
+  $masterControl->start();
 
 } catch (\Exception $e) {
   echo $e->errorMessage();
