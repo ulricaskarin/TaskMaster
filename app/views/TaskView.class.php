@@ -91,6 +91,16 @@ class TaskView
   }
 
   /**
+   * Hides Form for adding of Task.
+   * @return string
+   */
+  public function hideAddForm() : string
+  {
+    return
+    self::renderAddButton();
+  }
+
+  /**
    * Renders complete page to user
    *
    * @return
