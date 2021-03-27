@@ -22,6 +22,13 @@
      parent::__construct();
    }
 
+   /**
+    * Create Task
+    * @param  string $title    - title of Task
+    * @param  string $content  - content of Task
+    * @param  int    $priority - priority of Task
+    * @return bool   True if successful
+    */
    public function create (string $title, string $content, int $priority)
    {
      assert(is_string($title) && is_string($content) && is_int($priority));
@@ -52,5 +59,37 @@
      $result = $this->db->execute();
 
      return $result;
+   }
+
+   public function edit($post, $id)
+   {
+     $query = 'UPDATE tasks
+              SET title = :title, content = :content, priority = :priority
+              WHERE id = :id';
+
+     $this->db->query($query);
+     $this->db->bind(':title', $post['title']);
+     $this->db->bind(':content', $post['content']);
+     $this->db->bind(':priority', $post['priority']);
+     $this->db->bind(':id', $id);
+     $this->db->execute();
+
+     foreach ($post as $key => $value) {
+
+        if ($value !== '') {
+          $query = "UPDATE tasks
+          SET title = :title, content = :content, priority = :priority
+          WHERE id = :id";
+
+          $this->db->query($query);
+          $this->db->bind(':title', $post['title']);
+          $this->db->bind(':content', $post['content']);
+          $this->db->bind(':priority', $post['priority']);
+          $this->db->bind(':id', $id);
+
+          $this->db->execute();
+        }
+     }
+     return $this->db->execute();
    }
  }
