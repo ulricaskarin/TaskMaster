@@ -90,4 +90,16 @@ class Session
       session_destroy();
     }
   }
+
+  /**
+   * Displays sessions array < for DEVELOPMENT mode only >.
+   */
+  public static function displaySessionArray()
+  {
+    if(DEVELOPMENT) {
+      echo "<pre>";
+      print_r($_SESSION);
+      echo "</pre>";
+    }
+  }
 }

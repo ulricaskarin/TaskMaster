@@ -9,6 +9,10 @@
 
 require_once('_env.php');
 require_once(ROOT_PATH .'/app/_config/_autoload.php');
+use \_storage\Session;
+
+Session::startSession();
+Session::displaySessionArray();
 
 try {
   $masterControl = new controllers\MasterController();
