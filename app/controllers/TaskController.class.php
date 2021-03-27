@@ -13,9 +13,13 @@ namespace controllers;
 
 class TaskController
 {
+  private $taskModel;
+  private $taskView;
 
-  public function __construct()
+  public function __construct(\models\Task $taskModel,\views\TaskView $taskView)
   {
-     
+    $this->taskModel = $taskModel;
+    $this->taskView = $taskView;
   }
+
 }

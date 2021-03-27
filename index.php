@@ -9,14 +9,13 @@
 
 require_once('_env.php');
 require_once(ROOT_PATH .'/app/_config/_autoload.php');
-echo 'This is Task Master';
 
 try {
-  $task = new models\Task();
-  $task->create('Content comes here', 1);
+  $taskModel = new models\Task();
+  $taskView = new views\TaskView();
+  $taskControl = new controllers\TaskController($taskModel, $taskView);
+  $taskView->renderHTML();
+
 } catch (\Exception $e) {
   echo $e->errorMessage();
 }
-// $task = new models\Task();
-// $task->create( 'Content comes here', 1);
-// var_dump($task);
