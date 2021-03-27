@@ -46,9 +46,29 @@ class TaskView
   }
 
   /**
+   * Is Add Button clicked?
+   * Listens to user action on add button.
+   * @return bool - true when clicked
+   */
+  public function isAddButtonClicked() : bool
+  {
+    return isset($_GET['add']) ? true : false;
+  }
+
+  /**
+   * Is Hide Button clicked?
+   * Listens to user action on hide button.
+   * @return bool - true when clicked
+   */
+  public function hideFormButton() : bool
+  {
+    return isset($_GET["hide"]) ? true : false;
+  }
+
+  /**
    * Renders complete page to user
    *
-   * @return 
+   * @return
    */
   public function renderPage()
   {
