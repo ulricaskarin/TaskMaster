@@ -10,6 +10,7 @@
 
 namespace views;
 
+use \_storage\Session;
 
 class TaskView
 {
@@ -20,6 +21,7 @@ class TaskView
   private static $hideButton = 'HIDE';
   private static $highPrio = 'TaskView::HighPriority';
   private static $lowPrio = 'TaskView::HighPriority';
+  private static $messageId = 'TaskView::Message';
 
 
   public function __construct()
@@ -80,7 +82,7 @@ class TaskView
  * When rendered - a button to hide the form is shown to user.
  * @return string
  */
-  public function renderAddForm() : string
+  public function renderAddForm(string $message) : string
   {
     return
 
@@ -97,6 +99,9 @@ class TaskView
     <div class="row">
     <div class="col-md-6 mx-auto">
     <form action="post">
+    <fieldset>
+    <legend></legend>
+    <p class="message" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>
     <div class="form-title">My task:</div>
     <label for="title">Title:</label><br>
     <input type="text" autofocus name="title" value=""><br>
@@ -107,6 +112,7 @@ class TaskView
     <input type="radio" name="'.self::$lowPrio.'" value="2">
     <label for="lowpriority">Low Priority</label>
     <input type="submit" value="Add me!">
+    </fieldset>
     </form>
     </div>
     </div>
@@ -123,17 +129,29 @@ class TaskView
     self::renderAddButton();
   }
 
+  public function getResponse() : string
+  {
+    if (Session::get(Session::$flashMessage)) {
+      $messageToUser = $_SESSION[Session::$flashMessage];
+      Session::destroyOne(Session::$flashMessage);
+      return $messageToUser;
+    }
+    return 'This is just a test';
+  }
+
   /**
    * Serves the correct view to the user based on user action.
    * If 'Add Button' is clicked -> shows 'Add Task Form'
    * If not --> shows all Tasks and 'Add button'.
+   *
    * @return string
    */
   public function responseView() : string
   {
-    $output='';
+    $output = null;
+    $messageToUser = $this->getResponse();
 
-    $this->isAddButtonClicked() ? $output = $this->renderAddForm()
+    $this->isAddButtonClicked() ? $output = $this->renderAddForm($messageToUser)
     : $output = $this->hideAddForm();
 
     return $output;
