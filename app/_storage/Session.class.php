@@ -31,4 +31,14 @@ class Session
             session_start();
         }
     }
+    
+    /**
+     * Sets session configuration in ini.
+     * Settings hinder the passing of session id in URL.
+     */
+    private static function setIniSessionSettings()
+    {
+        ini_set("session.use_only_cookies", true);
+        ini_set("session.use_trans_sid", false);
+    }
 }
