@@ -6,6 +6,8 @@
  * @version 1.0.0
  */
 
+//TODO remember: redirect user on add task
+
 namespace views;
 
 
@@ -14,8 +16,11 @@ class TaskView
   private $head;
   private $footer;
   private static $heading = 'Task Master';
-  private static $addButton = 'ADD TASK';
-  private static $hideButton = 'HIDE FORM';
+  private static $addButton = 'ADD TASK?';
+  private static $hideButton = 'HIDE';
+  private static $highPrio = 'TaskView::HighPriority';
+  private static $lowPrio = 'TaskView::HighPriority';
+
 
   public function __construct()
   {
@@ -30,8 +35,13 @@ class TaskView
    */
   public function renderAddButton() : string
   {
-    return '<div class="span2"><a class="btn btn-dark btn-block" role="button"
-    href=?add title="'.self::$addButton.'">'.self::$addButton.'</a></div>';
+    return
+    '<div class="row">
+    <div class="col-md-6 mx-auto">
+    <a class="button add" role="button"
+    href=?add title="'.self::$addButton.'">'.self::$addButton.'&nbsp;<i class="fas fa-arrow-down"></i></a>
+    </div>
+    ';
   }
 
   /**
@@ -41,8 +51,8 @@ class TaskView
    */
   public function renderHideButton() : string
   {
-    return '<div class="span2"><a class="btn btn-dark btn-block" role="button"
-    href=?hide title="'.self::$hideButton.'">'.self::$hideButton.'</a></div>';
+    return '<a class="button" role="button"
+    href=?hide title="'.self::$hideButton.'">'.self::$hideButton.'&nbsp;<i class="fas fa-arrow-up"></i></a>';
   }
 
   /**
@@ -74,19 +84,32 @@ class TaskView
   {
     return
 
-    self::renderHideButton().
     '
+    <div class="row">
+    <div class="col-md-6 mx-auto">'
+
+    .self::renderHideButton().
+
+    '</div>
+    </div>
+
+
+    <div class="row">
+    <div class="col-md-6 mx-auto">
     <form action="post">
-      <label for="title">Title:</label><br>
-      <input type="text" name="title" value=""><br>
-      <label for="content">Content:</label><br>
-      <input type="text" name="content" value=""><br><br>
-      <input type="radio" name="highpriority" value="1" name="prio">
-      <label for="highpriority">High Priority</label>
-      <input type="radio" name="lowpriority" value="2" name="prio">
-      <label for="lowpriority">Low Priority</label>
-      <input type="submit" value="Submit">
-     </form>
+    <div class="form-title">My task:</div>
+    <label for="title">Title:</label><br>
+    <input type="text" autofocus name="title" value=""><br>
+    <label for="content">Content:</label><br>
+    <input type="textarea" name="content" value=""><br><br>
+    <input type="radio" name="'.self::$highPrio.'" value="1">
+    <label for="highpriority">High Priority</label>
+    <input type="radio" name="'.self::$lowPrio.'" value="2">
+    <label for="lowpriority">Low Priority</label>
+    <input type="submit" value="Add me!">
+    </form>
+    </div>
+    </div>
     ';
   }
 
@@ -116,26 +139,67 @@ class TaskView
     return $output;
   }
 
+  //TODO Add method to list all tasks dynamically!
+
   /**
-   * Renders complete page to user
+   * Renders complete page to user.
+   * View changes due to user action.
    *
    * @return
    */
-  public function renderPage()
+  public function renderPage() // TODO Fix footer bug!
   {
     ob_start();
     echo
     $this->head->renderHead().
-    '<h1>'.self::$heading.'</h1>
-    <h2>Test Task Form</h2>'.
+    '
+    <div class="header"><h1>'.self::$heading.'</h1></div>
+    <div class="subheader"></div>
+
+    <div class="container">'.
+
     $this->responseView().
-    '<div class="card" style="width: 18rem;">
+    '
+    <div class="space"></div>
+    <div class="row">
+
+    <div class="col-md-4">
+    <div class="task_card" >
     <div class="card-body">
-    <h5 class="card-title">Card title</h5>
+    <h5 class="task_card_title">Card title</h5>
     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card content.</p>
     <a href="#" class="card-link">Card link</a>
     <a href="#" class="card-link">Another link</a>
+    </div>
+    </div>
+    </div>
+
+    <div class="col-md-4">
+    <div class="task_card" >
+    <div class="card-body">
+    <h5 class="task_card_title">Card title</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card content.</p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+    </div>
+    </div>
+    </div>
+
+    <div class="col-md-4">
+    <div class="task_card" >
+    <div class="card-body">
+    <h5 class="task_card_title">Card title</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card content.</p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+    </div>
+    </div>
+    </div>
+
+
     </div>
     </div>'.
     $this->footer->renderFooter();
