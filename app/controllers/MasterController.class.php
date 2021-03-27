@@ -23,7 +23,6 @@ class MasterController
 
   public function start()
   {
-    $this->taskView->renderHTML();
+    $this->taskView->renderPage();
   }
-
 }
