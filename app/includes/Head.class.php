@@ -25,8 +25,7 @@ class Head
    */
   public static function renderHead()
   {
-    ob_start();
-    echo
+    return
     '<!DOCTYPE html>
     <html lang="'.self::$lang.'" dir="ltr">
     <head>
@@ -45,6 +44,5 @@ class Head
     <link rel="stylesheet" href="'.self::$urlToStylesheet.'">
     </head>
     <body>';
-    ob_end_flush();
   }
 }
