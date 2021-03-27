@@ -67,4 +67,27 @@ class Session
       return false;
     }
   }
+
+  /**
+   * Destroys one session if it is set.
+   *
+   * @param string $key
+   */
+  public static function destroyOne(string $key)
+  {
+    if (isset($_SESSION[$key])) {
+      unset($_SESSION[$key]);
+    }
+  }
+
+  /**
+   * Destroys all sessions set.
+   */
+  public static function destroyAll()
+  {
+    if (session_status() === PHP_SESSION_ACTIVE) {
+      session_unset();
+      session_destroy();
+    }
+  }
 }
