@@ -8,38 +8,31 @@
 
 namespace views;
 
+
 class TaskView
 {
+  private $head;
+  private $footer;
+  private static $heading = 'Task Master';
+  private static $addButton = 'ADD TASK';
+  private static $hideFormButton = 'HIDE FORM';
+
   public function __construct()
   {
-
+    $this->head = new \includes\Head();
+    $this->footer = new \includes\Footer();
   }
 
   public function renderHTML()
   {
     ob_start();
     echo
-    '<!DOCTYPE html>
-    <html>
-    <body>
-
-    <h2>Test Task Form</h2>
-
-    <form action="post">
-      <label for="title">Title:</label><br>
-      <input type="text" name="title" value=""><br>
-      <label for="content">Content:</label><br>
-      <input type="text" name="content" value=""><br><br>
-      <input type="radio" name="highpriority" value="1" name="prio">
-      <label for="priority">High Priority</label>
-      <input type="radio" name="lowpriority" value="2" name="prio">
-      <label for="priority">Low Priority</label>
-      <input type="submit" value="Submit">
-    </form>
-
-    </body>
-    </html>
-    ';
+    $this->head->renderHead().
+    '<h1>'.self::$heading.'</h1>
+    <h2>Test Task Form</h2>'.
+    $this->footer->renderFooter();
     ob_end_flush();
   }
+
+
 }
