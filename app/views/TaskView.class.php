@@ -77,11 +77,39 @@ class TaskView
     return isset($_GET["hide"]) ? true : false;
   }
 
-/**
- * Renders Form for adding of Task.
- * When rendered - a button to hide the form is shown to user.
- * @return string
- */
+  public function getResponse() : string
+  {
+    if (Session::get(Session::$flashMessage)) {
+      $messageToUser = $_SESSION[Session::$flashMessage];
+      Session::destroyOne(Session::$flashMessage);
+      return $messageToUser;
+    }
+    return 'This is just a test';
+  }
+
+  /**
+   * Serves the correct view to the user based on user action.
+   * If 'Add Button' is clicked -> shows 'Add Task Form'
+   * If not --> shows all Tasks and 'Add button'.
+   *
+   * @return string
+   */
+  public function responseView() : string
+  {
+    $output = null;
+    $messageToUser = $this->getResponse();
+
+    $this->isAddButtonClicked() ? $output = $this->renderAddForm($messageToUser)
+    : $output = $this->hideAddForm();
+
+    return $output;
+  }
+
+  /**
+  * Renders Form for adding of Task.
+  * When rendered - a button to hide the form is shown to user.
+  * @return string
+  */
   public function renderAddForm(string $message) : string
   {
     return
@@ -127,34 +155,6 @@ class TaskView
   {
     return
     self::renderAddButton();
-  }
-
-  public function getResponse() : string
-  {
-    if (Session::get(Session::$flashMessage)) {
-      $messageToUser = $_SESSION[Session::$flashMessage];
-      Session::destroyOne(Session::$flashMessage);
-      return $messageToUser;
-    }
-    return 'This is just a test';
-  }
-
-  /**
-   * Serves the correct view to the user based on user action.
-   * If 'Add Button' is clicked -> shows 'Add Task Form'
-   * If not --> shows all Tasks and 'Add button'.
-   *
-   * @return string
-   */
-  public function responseView() : string
-  {
-    $output = null;
-    $messageToUser = $this->getResponse();
-
-    $this->isAddButtonClicked() ? $output = $this->renderAddForm($messageToUser)
-    : $output = $this->hideAddForm();
-
-    return $output;
   }
 
   //TODO Add method to list all tasks dynamically!
