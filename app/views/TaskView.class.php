@@ -89,10 +89,23 @@ class TaskView
   }
 
   /**
+   * Set Response
+   * Message set within a request session variable.
+   * @param string $message Message to user.
+   *
+   */
+  public function setResponse(string $message)
+  {
+    if (is_string($message)) {
+      Session::set(Session::$flashMessage, $message);
+    }
+  }
+
+  /**
    * Get Response
    * If message sent with session, serves this message to user.
    *
-   * @return string - Message to user.
+   * @return string $message - Message to user.
    */
   public function getResponse() : string
   {
