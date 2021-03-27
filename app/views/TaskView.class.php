@@ -22,6 +22,7 @@ class TaskView
   private static $highPrio = 'TaskView::HighPriority';
   private static $lowPrio = 'TaskView::HighPriority';
   private static $messageId = 'TaskView::Message';
+  private static $addTask = 'TaskView::AddTask';
 
 
   public function __construct()
@@ -77,6 +78,22 @@ class TaskView
     return isset($_GET["hide"]) ? true : false;
   }
 
+  /**
+   * User tries to add task to [task] table.
+   *
+   * @return bool - true if pushing submit on add task.
+   */
+  public function userTriesAddTask() : bool
+  {
+    return isset($_POST[self::$addTask]) ? true : false;
+  }
+
+  /**
+   * Get Response
+   * If message sent with session, serves this message to user.
+   *
+   * @return string - Message to user.
+   */
   public function getResponse() : string
   {
     if (Session::get(Session::$flashMessage)) {
