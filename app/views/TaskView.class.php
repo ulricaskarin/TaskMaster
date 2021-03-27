@@ -60,7 +60,7 @@ class TaskView
    * Listens to user action on hide button.
    * @return bool - true when clicked
    */
-  public function hideFormButton() : bool
+  public function isHideButtonClicked() : bool
   {
     return isset($_GET["hide"]) ? true : false;
   }
