@@ -1,0 +1,168 @@
+@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Monda:400,700);
+@import url(https://fonts.googleapis.com/css?family=Quicksand:300,500);
+/*----------------------------------------------------------------------------
+CSS by Ulrica Skarin (♥_♥) TaskMaster!
+------------------------------------------------------------------------------*/
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+body {
+}
+
+.header {
+  background-color: #ffdd67;
+  height: 300px;
+  text-align: center;
+  padding: 100px;
+}
+.subheader {
+  height: 5px;
+  background-color: #ff5a79;
+}
+.space {
+  padding: 1em;
+}
+h1 {
+  font-family: 'Monda', sans-serif;
+  font-size: 5em;
+}
+
+.button {
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.5em;
+  text-decoration: none;
+  text-align: center;
+  color: #fff;
+  width: 100%;
+  border-radius: 5px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: #ff5a79;
+  padding: 0.2em;
+  margin-top: -1.2em;
+  cursor: pointer;
+  transition: all .3s ease-out;
+  transition-property: all;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+  transition-delay: 0s;
+}
+
+.button:hover{
+  background-color: #e64361;
+  color: #fff;
+}
+
+.add {
+  border-radius: 5px;
+}
+
+form {
+  font-family: 'Quicksand', sans-serif;
+	width: 100%;
+	padding: 2em;
+	background: #FFFFFF;
+	margin: 0em 0 2em 0;
+  border: 1px solid #ccc;
+  border-top: 0px;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+	box-shadow: #a8b6be 0px 15px 10px -15px;
+}
+
+form input[type="text"],
+form input[type="textarea"] {
+  box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	outline: none;
+	display: block;
+	width: 100%;
+	padding: 7px;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	background: transparent;
+	margin-bottom: 10px;
+	font: 16px Arial, Helvetica, sans-serif;
+	height: 45px;
+}
+form input[type="submit"]{
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.5em;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  color: #000;
+  width: 100%;
+  background-color: #ffdd67;
+  padding: 0.2em;
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+  cursor: pointer;
+  border: 0px;
+  border-radius: 5px;
+  transition: all .3s ease-out;
+  transition-property: all;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+  transition-delay: 0s;
+}
+form input[type="button"]:hover,
+form input[type="submit"]:hover {
+  background-color: #42ade2;
+  color: #fff;
+}
+
+form input[type="radio"] {
+
+}
+
+.form-title {
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  padding-bottom: 15px;
+}
+
+.task_card {
+  background-color: #fff;
+  border: 1px solid #7F7F7F;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0  #a8b6be;
+  margin-bottom: 1.25rem;
+  text-decoration: none;
+  transition: all .3s ease-out;
+  transition-property: all;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+  transition-delay: 0s;
+  padding: 15px;
+  width: 100%
+  overflow: hidden;
+}
+
+.task_card:hover {
+  box-shadow: #a8b6be 0px 4px 8px;
+  transform: translate3d(0px, -1px, 0px);
+}
+.task_card:after {
+  /* content: "";
+  display: block;
+  padding-bottom: 100%; */
+}
+
+.task_card_title {
+  color: #fff;
+  background-color: #ff5a79;
+  height: 50px;
+  padding: 15px;
+  text-align: center;
+  text-transform: uppercase;
+}
