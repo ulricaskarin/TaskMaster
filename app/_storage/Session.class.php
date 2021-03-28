@@ -16,7 +16,7 @@ class Session
 {
   // Static session variables for different sessions:
   public static $flashMessage = 'flashMessage';
-  public static $taskAddedSuccess = 'taskAddedSucces';
+  public static $addTaskSuccess = 'addTaskSuccess';
 
   // Cookie parameters for session:
   private static $domain = "ulricaskarin.com";
