@@ -128,6 +128,11 @@ class TaskView
     return isset($_POST[self::$submitTask]) ? true : false;
   }
 
+  public function resetForm()
+  {
+    return $_POST = [];
+  }
+
   /**
    * Set Response
    * Message set within a request session variable.
@@ -155,7 +160,7 @@ class TaskView
       Session::destroyOne(Session::$flashMessage);
       return $messageToUser;
     }
-    return 'This is just a test';
+    return '';
   }
 
   /**
@@ -177,7 +182,7 @@ class TaskView
   }
 
   /**
-  * Renders Form for adding of Task.
+  * Renders Form for submit / add of new Task.
   * When rendered - a button to hide the form is shown to user.
   * @return string
   */
