@@ -29,11 +29,15 @@ class TaskController
   public function listen()
   {
     try {
+
       $this->taskView->userTrySubmitTask() ? $this->processSubmit() : '';
-      $this->processAllTasks();
+
+
     } catch (\Exception $e) {
 			$this->taskView->setResponse($e->errorMessage());
 		}
+
+    $this->processAllTasks();
     $this->taskView->renderPage();
   }
 
