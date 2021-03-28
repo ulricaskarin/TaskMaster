@@ -129,6 +129,9 @@ class TaskView
     return isset($_POST[self::$submitTask]) ? true : false;
   }
 
+  /**
+   * Resets $_POST
+   */
   public function resetForm()
   {
     return $_POST = [];
@@ -173,15 +176,23 @@ class TaskView
    */
   public function responseView() : string
   {
+
     $output = null;
     $messageToUser = $this->getResponse();
 
-    $this->isAddButtonClicked() ? $output = $this->renderAddForm($messageToUser)
-    : $output = $this->hideAddForm();
+    $this->isAddButtonClicked() && !Session::get(Session::$addTaskSuccess) ? $output = $this->renderAddForm($messageToUser)
+    : $output = $this->hideAddForm($messageToUser);
+
+    Session::destroyAll();
 
     return $output;
   }
 
+  /**
+   * Render All Tasks
+   * @param  array  - array of tasks from [tasks] table.
+   * @return string - html
+   */
   public function renderAllTasks(array $tasks = [])
   {
     ob_start();
@@ -194,8 +205,8 @@ class TaskView
         <div class="task_card" >
         <div class="card-body">
         <h5 class="task_card_title">'.$value["title"].'</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-        <p class="card-text">'.$value["content"].'</p>
+        <h6 class="task_card_prio_'.$value["priority"].'"></h6>
+        <p class="task_card_text">'.$value["content"].'</p>
         <a href="#" class="card-link">Edit</a>
         <a href="#" class="card-link">Delete</a>
         </div>
@@ -259,10 +270,11 @@ class TaskView
    * Hides Form for adding of Task.
    * @return string
    */
-  public function hideAddForm() : string
+  public function hideAddForm($message) : string
   {
     return
-    self::renderAddButton();
+    self::renderAddButton().
+    '<p class="message" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>';
   }
 
   /**
