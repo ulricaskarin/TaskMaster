@@ -11,6 +11,9 @@
 
 namespace controllers;
 
+use \_storage\Session;
+use \views\MessageView;
+
 class TaskController
 {
   private $taskModel;
@@ -46,22 +49,44 @@ class TaskController
    * Gets input from Task view and serves them to the Task model
    * for further creation of task.
    *
-   * On successful creation of task -> asks Task View to reset form.
    */
   public function processSubmit()
   {
-    if($this->taskModel->create($this->taskView->getTitle(),
-    $this->taskView->getContent(), $this->taskView->getPriority())) {
-      $this->taskView->resetForm();
-    }
+    $title = $this->taskView->getTitle();
+    $content = $this->taskView->getContent();
+    $priority = $this->taskView->getPriority();
+
+    $this->taskModel->create($title, $content, $priority) ? $this->addTaskSuccess() : '';
   }
 
+  /**
+   * Process all tasks.
+   * Asks TaskModel for all tasks in database table [tasks] and instructs
+   * TaskView to render them.
+   */
   public function processAllTasks()
   {
     $this->allTasks = $this->taskModel->getAllTasks();
     $this->taskView->renderAllTasks($this->allTasks);
   }
 
+  /**
+   * Add task Success.
+   * On successful add of task ->
+   * -> instructs TaskView to reset form.
+   * -> sets Success Session.
+   * -> redirects user.
+   */
+  public function addTaskSuccess()
+  {
+    $this->taskView->resetForm();
 
+    Session::set(Session::$addTaskSuccess, 'Success');
+    $this->taskView->setResponse(MessageView::$addTaskSuccess);
 
+    if (isset($_POST) && ($_SERVER["REQUEST_METHOD"] === "POST")) {
+            header(BASE_URL, true, 302);
+            exit();
+    }
+  }
 }
