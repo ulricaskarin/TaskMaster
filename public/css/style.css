@@ -126,7 +126,7 @@ form input[type="radio"] {
 .form-title {
   display: block;
   font-family: 'Quicksand', sans-serif;
-  font-size: 1.5em;
+  font-size: 1.2em;
   text-transform: uppercase;
   padding-bottom: 15px;
 }
@@ -144,7 +144,7 @@ form input[type="radio"] {
   transition-timing-function: ease-out;
   transition-delay: 0s;
   padding: 15px;
-  width: 100%
+  width: 100%;
   overflow: hidden;
 }
 
@@ -159,10 +159,37 @@ form input[type="radio"] {
 }
 
 .task_card_title {
-  color: #fff;
-  background-color: #ff5a79;
+  color: #000;
+  background-color:  #ffdd67;
   height: 50px;
   padding: 15px;
   text-align: center;
   text-transform: uppercase;
+}
+
+.task_card_text{
+  min-height: 5em;
+}
+
+.task_card_prio_1{
+  background-color: #ff7281;
+}
+.task_card_prio_2 {
+  background-color: #42ade2;
+}
+.task_card_prio_1, .task_card_prio_2{
+  color: #fff;
+  padding: 0.2em;
+  text-align: center;
+  font-family: 'Monda', sans-serif;
+  font-size: 0.9em;
+}
+.task_card_prio_1:before, .task_card_prio_2:before  {
+  content: "★ ";
+}
+.task_card_prio_1:after {
+  content: "High Priority! ★";
+}
+.task_card_prio_2:after {
+  content: "Low Priority! ★";
 }
