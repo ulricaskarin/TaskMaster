@@ -35,6 +35,8 @@ class Task extends \models\Model
    //TODO Max 14 chars in title. Max 100 in content?
    if(empty($title)) {
      throw new \exceptions\MissingTitleException();
+   } else if (strlen($title) >14) {
+     throw new \exceptions\TitleExceedsCharsCountException();
    } else if(empty($content)) {
      throw new \exceptions\MissingContentException();
    } else if (empty($priority)) {
