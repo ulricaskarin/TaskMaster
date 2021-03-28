@@ -84,7 +84,26 @@ class TaskController
     Session::set(Session::$addTaskSuccess, 'Success');
     $this->taskView->setResponse(MessageView::$addTaskSuccess);
 
-    if (isset($_POST) && ($_SERVER["REQUEST_METHOD"] === "POST")) {
+    $this->redirect();
+
+  }
+
+  /**
+   * Checks if POST request
+   * @return boolean - true if post
+   */
+  public function isPostRequest ()
+  {
+    return isset($_POST) && ($_SERVER['REQUEST_METHOD'] === 'POST');
+  }
+
+  /**
+   * Redirects user to index page if post request.
+   * Hinders from double posting on refresh page.
+   */
+  public function redirect ()
+  {
+    if (isset($_POST) && ($_SERVER['REQUEST_METHOD'] === 'POST')) {
             header(BASE_URL, true, 302);
             exit();
     }
