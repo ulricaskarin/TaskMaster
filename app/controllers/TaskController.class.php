@@ -103,7 +103,7 @@ class TaskController
    */
   public function redirect ()
   {
-    if (isset($_POST) && ($_SERVER['REQUEST_METHOD'] === 'POST')) {
+    if ($this->isPostRequest()) {
             header(BASE_URL, true, 302);
             exit();
     }
