@@ -15,6 +15,7 @@ class TaskController
 {
   private $taskModel;
   private $taskView;
+  public $allTasks;
 
   public function __construct(\models\Task $taskModel,\views\TaskView $taskView)
   {
@@ -29,6 +30,7 @@ class TaskController
   {
     try {
       $this->taskView->userTrySubmitTask() ? $this->processSubmit() : '';
+      $this->processAllTasks();
     } catch (\Exception $e) {
 			$this->taskView->setResponse($e->errorMessage());
 		}
@@ -47,8 +49,15 @@ class TaskController
     if($this->taskModel->create($this->taskView->getTitle(),
     $this->taskView->getContent(), $this->taskView->getPriority())) {
       $this->taskView->resetForm();
-      var_dump($_POST);
     }
   }
+
+  public function processAllTasks()
+  {
+    $this->allTasks = $this->taskModel->getAllTasks();
+    $this->taskView->renderAllTasks($this->allTasks);
+  }
+
+
 
 }

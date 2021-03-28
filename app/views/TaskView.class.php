@@ -25,6 +25,7 @@ class TaskView
   private static $lowPrio = 'TaskView::LowPriority';
   private static $submitTask = 'TaskView::SubmitTask';
   private static $messageId = 'TaskView::Message';
+  public $allTasks ='';
 
 
   public function __construct()
@@ -181,6 +182,34 @@ class TaskView
     return $output;
   }
 
+  public function renderAllTasks(array $tasks = [])
+  {
+    ob_start();
+
+    echo '<div class="space"></div><div class="row">';
+
+    foreach($tasks as $array =>$value) {
+        echo'
+        <div class="col-md-4">
+        <div class="task_card" >
+        <div class="card-body">
+        <h5 class="task_card_title">'.$value["title"].'</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+        <p class="card-text">'.$value["content"].'</p>
+        <p>'.$value["content"].'</p>
+        <a href="#" class="card-link">Edit</a>
+        <a href="#" class="card-link">Delete</a>
+        </div>
+        </div>
+        </div>';
+      }
+
+      echo '</div></div>';
+
+      $this->allTasks = ob_get_clean();
+      return $this->allTasks;
+  }
+
   /**
   * Renders Form for submit / add of new Task.
   * When rendered - a button to hide the form is shown to user.
@@ -257,6 +286,7 @@ class TaskView
     <div class="container">'.
 
     $this->responseView().
+    $this->allTasks.
     '
     <div class="space"></div>
     <div class="row">
