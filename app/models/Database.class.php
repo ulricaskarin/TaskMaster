@@ -129,7 +129,7 @@
   public function result()
   {
     $this->execute();
-    return $this->statment->fetch(PDO::FETCH_ASSOC);
+    return $this->statement->fetch(PDO::FETCH_ASSOC);
   }
 
   /**

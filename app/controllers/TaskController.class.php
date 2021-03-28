@@ -40,6 +40,7 @@ class TaskController
 			$this->taskView->setResponse($e->errorMessage());
 		}
 
+    $this->processTasksByPriority(1);
     $this->processAllTasks();
     $this->taskView->renderPage();
   }
@@ -68,6 +69,13 @@ class TaskController
   {
     $this->allTasks = $this->taskModel->getAllTasks();
     $this->taskView->renderAllTasks($this->allTasks);
+  }
+
+  public function processTasksByPriority(int $prio)
+  {
+    $prio = 2;
+    $tasks = $this->taskModel->sortByPriority(2);
+    $this->taskView->renderTasksByPriority($tasks);
   }
 
   /**

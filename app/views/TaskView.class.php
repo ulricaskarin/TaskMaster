@@ -220,6 +220,11 @@ class TaskView
       return $this->allTasks;
   }
 
+  public function renderTasksByPriority(array $tasks = [])
+  {
+    var_dump($tasks);
+  }
+
   /**
   * Renders Form for submit / add of new Task.
   * When rendered - a button to hide the form is shown to user.
