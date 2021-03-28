@@ -32,7 +32,7 @@ class Task extends \models\Model
   public function create (string $title, string $content, int $priority)
   {
    assert(is_string($title) && is_string($content) && is_int($priority));
-
+   //TODO Max 14 chars in title. Max 100 in content?
    if(empty($title)) {
      throw new \exceptions\MissingTitleException();
    } else if(empty($content)) {
