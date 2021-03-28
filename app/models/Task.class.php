@@ -11,84 +11,100 @@
  * @version 1.0.0
  */
 
- namespace models;
+namespace models;
 
- class Task extends \models\Model
- {
-   private $error;
+class Task extends \models\Model
+{
+  private $error;
 
-   public function __construct()
-   {
-     parent::__construct();
+  public function __construct()
+  {
+   parent::__construct();
+  }
+
+  /**
+  * Create Task
+  * @param  string $title    - title of Task
+  * @param  string $content  - content of Task
+  * @param  int    $priority - priority of Task
+  * @return bool   True if successful
+  */
+  public function create (string $title, string $content, int $priority)
+  {
+   assert(is_string($title) && is_string($content) && is_int($priority));
+
+   if(empty($title)) {
+     throw new \exceptions\MissingTitleException();
+   } else if(empty($content)) {
+     throw new \exceptions\MissingContentException();
+   } else if (empty($priority)) {
+      throw new \exceptions\MissingPriorityException();
+   } else if ($title !== strip_tags($title) || $content !== strip_tags($content)){
+      throw new \exceptions\InvalidCharactersException();
    }
 
-   /**
-    * Create Task
-    * @param  string $title    - title of Task
-    * @param  string $content  - content of Task
-    * @param  int    $priority - priority of Task
-    * @return bool   True if successful
-    */
-   public function create (string $title, string $content, int $priority)
-   {
-     assert(is_string($title) && is_string($content) && is_int($priority));
+   // Insert data in table [tasks]
+   $query = 'INSERT INTO tasks
+            (title, content, priority)
+            VALUES
+            (:title, :content, :priority)';
 
-     if(empty($title)) {
-       throw new \exceptions\MissingTitleException();
-     } else if(empty($content)) {
-       throw new \exceptions\MissingContentException();
-     } else if (empty($priority)) {
-        throw new \exceptions\MissingPriorityException();
-     } else if ($title !== strip_tags($title) || $content !== strip_tags($content)){
-        throw new \exceptions\InvalidCharactersException();
-     }
+   $this->db->query($query);
 
-     // Insert data in table [tasks]
-     $query = 'INSERT INTO tasks
-              (title, content, priority)
-              VALUES
-              (:title, :content, :priority)';
+   $this->db->bind(':title', $title);
+   $this->db->bind(':content', $content);
+   $this->db->bind(':priority', $priority);
 
-     $this->db->query($query);
+   $result = $this->db->execute();
 
-     $this->db->bind(':title', $title);
-     $this->db->bind(':content', $content);
-     $this->db->bind(':priority', $priority);
+   return $result;
+  }
 
-     $result = $this->db->execute();
+  public function edit($post, $id)
+  {
+   $query = 'UPDATE tasks
+            SET title = :title, content = :content, priority = :priority
+            WHERE id = :id';
 
-     return $result;
+   $this->db->query($query);
+   $this->db->bind(':title', $post['title']);
+   $this->db->bind(':content', $post['content']);
+   $this->db->bind(':priority', $post['priority']);
+   $this->db->bind(':id', $id);
+   $this->db->execute();
+
+   foreach ($post as $key => $value) {
+
+      if ($value !== '') {
+        $query = "UPDATE tasks
+        SET title = :title, content = :content, priority = :priority
+        WHERE id = :id";
+
+        $this->db->query($query);
+        $this->db->bind(':title', $post['title']);
+        $this->db->bind(':content', $post['content']);
+        $this->db->bind(':priority', $post['priority']);
+        $this->db->bind(':id', $id);
+
+        $this->db->execute();
+      }
    }
+   return $this->db->execute();
+  }
 
-   public function edit($post, $id)
-   {
-     $query = 'UPDATE tasks
-              SET title = :title, content = :content, priority = :priority
-              WHERE id = :id';
+  /**
+  * Get All Tasks
+  *
+  * @return array associative array with all rows & columns from [task table]
+  */
+  public function getAllTasks()
+  {
+   $query = "SELECT * FROM tasks ORDER BY created DESC";
 
-     $this->db->query($query);
-     $this->db->bind(':title', $post['title']);
-     $this->db->bind(':content', $post['content']);
-     $this->db->bind(':priority', $post['priority']);
-     $this->db->bind(':id', $id);
-     $this->db->execute();
+   $this->db->query($query);
 
-     foreach ($post as $key => $value) {
+   $tasks = $this->db->resultset();
 
-        if ($value !== '') {
-          $query = "UPDATE tasks
-          SET title = :title, content = :content, priority = :priority
-          WHERE id = :id";
-
-          $this->db->query($query);
-          $this->db->bind(':title', $post['title']);
-          $this->db->bind(':content', $post['content']);
-          $this->db->bind(':priority', $post['priority']);
-          $this->db->bind(':id', $id);
-
-          $this->db->execute();
-        }
-     }
-     return $this->db->execute();
-   }
- }
+   return $tasks;
+  }
+}
