@@ -37,7 +37,6 @@
        throw new \exceptions\MissingTitleException();
      } else if(empty($content)) {
        throw new \exceptions\MissingContentException();
-       echo 'empty content';
      } else if (empty($priority)) {
         throw new \exceptions\MissingPriorityException();
      } else if ($title !== strip_tags($title) || $content !== strip_tags($content)){

@@ -19,10 +19,12 @@ class TaskView
   private static $heading = 'Task Master';
   private static $addButton = 'ADD TASK?';
   private static $hideButton = 'HIDE';
+  private static $title = 'TaskView::Title';
+  private static $content = 'TaskView::Content';
   private static $highPrio = 'TaskView::HighPriority';
-  private static $lowPrio = 'TaskView::HighPriority';
+  private static $lowPrio = 'TaskView::LowPriority';
+  private static $submitTask = 'TaskView::SubmitTask';
   private static $messageId = 'TaskView::Message';
-  private static $addTask = 'TaskView::AddTask';
 
 
   public function __construct()
@@ -79,18 +81,57 @@ class TaskView
   }
 
   /**
-   * User tries to add task to [task] table.
+   * Get Title of Task from user input in form.
+   * @return string - the title of the task.
+   */
+  public function getTitle() : string
+  {
+    return isset($_POST[self::$title])&& !empty($_POST[self::$title]) ? trim($_POST[self::$title]) : '';
+  }
+
+  /**
+   * Get Content of Task from user input in form.
+   * @return string - the content of the task.
+   */
+  public function getContent() : string
+  {
+    return isset($_POST[self::$content]) && !empty($_POST[self::$content]) ? trim($_POST[self::$content]) : '';
+  }
+
+  /**
+   * Get Priority (high=1 or low=2) of Task from user input in form.
+   * @return int - 2 is default if no priority chosen.
+   */
+  public function getPriority() : int
+  {
+    if (isset($_POST[self::$highPrio])) {
+
+      return $_POST[self::$highPrio];
+
+    } elseif (isset($_POST[self::$lowPrio])) {
+
+      return $_POST[self::$lowPrio];
+
+    } else {
+
+      return 2;
+    }
+  }
+
+  /**
+   * User tries to submit / add new task to [task] table.
    *
    * @return bool - true if pushing submit on add task.
    */
-  public function userTriesAddTask() : bool
+  public function userTrySubmitTask() : bool
   {
-    return isset($_POST[self::$addTask]) ? true : false;
+    return isset($_POST[self::$submitTask]) ? true : false;
   }
 
   /**
    * Set Response
    * Message set within a request session variable.
+   *
    * @param string $message Message to user.
    *
    */
@@ -156,20 +197,24 @@ class TaskView
 
     <div class="row">
     <div class="col-md-6 mx-auto">
-    <form action="post">
+    <form method="post">
     <fieldset>
     <legend></legend>
     <p class="message" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>
     <div class="form-title">My task:</div>
-    <label for="title">Title:</label><br>
-    <input type="text" autofocus name="title" value=""><br>
-    <label for="content">Content:</label><br>
-    <input type="textarea" name="content" value=""><br><br>
+
+    <label for="'.self::$title.'">Title:</label><br>
+    <input type="text" autofocus name="'.self::$title.'" value="'.$this->getTitle().'"><br>
+
+    <label for="'.self::$content.'">Content:</label><br>
+    <input type="textarea" name="'.self::$content.'"content" value="'.$this->getContent().'"><br><br>
+
     <input type="radio" name="'.self::$highPrio.'" value="1">
-    <label for="highpriority">High Priority</label>
+    <label for="priority">High Priority</label>
     <input type="radio" name="'.self::$lowPrio.'" value="2">
-    <label for="lowpriority">Low Priority</label>
-    <input type="submit" value="Add me!">
+    <label for="priority">Low Priority</label>
+    <button type="submit" name="'.self::$submitTask.'" class="btn btn-dark"><i class="fas fa-plus"></i></button>
+    <input type="submit" name="'.self::$submitTask.'" value="Submit Task!">
     </fieldset>
     </form>
     </div>
@@ -249,8 +294,8 @@ class TaskView
 
 
     </div>
-    </div>'.
-    $this->footer->renderFooter();
+    </div>';
+    //$this->footer->renderFooter();
     ob_end_flush();
   }
 }

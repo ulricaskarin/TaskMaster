@@ -16,7 +16,7 @@ Session::displaySessionArray();
 
 try {
   $masterControl = new controllers\MasterController();
-  $masterControl->start();
+  $masterControl->startApplication();
 
 } catch (\Exception $e) {
   echo $e->errorMessage();

@@ -21,8 +21,8 @@ class MasterController
     $this->taskControl = new \controllers\TaskController($this->taskModel, $this->taskView);
   }
 
-  public function start()
+  public function startApplication()
   {
-    $this->taskView->renderPage();
+    $this->taskControl->listen();
   }
 }
