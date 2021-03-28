@@ -24,18 +24,15 @@ class TaskController
 
   /**
    * Listen to user action in TaskView.
-   *
-   * Asks TaskView to render page, listens and
-   * responds to user submit of new task.
-   *
    */
   public function listen()
   {
+    try {
+      $this->taskView->userTrySubmitTask() ? $this->processSubmit() : '';
+    } catch (\Exception $e) {
+			$this->taskView->setResponse($e->errorMessage());
+		}
     $this->taskView->renderPage();
-
-    if ($this->taskView->userTrySubmitTask()) {
-      $this->processSubmit();
-    }
   }
 
   /**
@@ -49,7 +46,8 @@ class TaskController
   {
     if($this->taskModel->create($this->taskView->getTitle(),
     $this->taskView->getContent(), $this->taskView->getPriority())) {
-      // TODO Add reset method.
+      $this->taskView->resetForm();
+      var_dump($_POST);
     }
   }
 

@@ -18,6 +18,12 @@ class Session
   public static $flashMessage = 'flashMessage';
   public static $taskAddedSuccess = 'taskAddedSucces';
 
+  // Cookie parameters for session:
+  private static $domain = "ulricaskarin.com";
+  private static $path = "/";
+  private static $secure = false;
+  private static $httponly = true;
+
   const ZERO = 0;
 
   /**
@@ -27,6 +33,7 @@ class Session
   {
     if (session_status() === PHP_SESSION_NONE) {
       self::setIniSessionSettings();
+      self::setSessionCookieParams();
       session_start();
     }
   }
@@ -39,6 +46,14 @@ class Session
   {
     ini_set('session.use_only_cookies', true);
     ini_set('session.use_trans_sid', false);
+  }
+
+  /**
+   * Sets session cookie parameters.
+   */
+  private static function setSessionCookieParams()
+  {
+    session_set_cookie_params(self::ZERO, self::$path, self::$domain, self::$secure, self::$httponly);
   }
 
   /**
