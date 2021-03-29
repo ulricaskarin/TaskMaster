@@ -35,13 +35,13 @@ class TaskController
 
       $this->taskView->userTrySubmitTask() ? $this->processSubmit() : '';
 
-
     } catch (\Exception $e) {
+
 			$this->taskView->setResponse($e->errorMessage());
 		}
+    $this->taskView->isSortByPriorityLinkClicked()
+    ? $this->processTasksByPriority() : $this->processAllTasks();
 
-    $this->processTasksByPriority(1);
-    $this->processAllTasks();
     $this->taskView->renderPage();
   }
 
@@ -71,11 +71,26 @@ class TaskController
     $this->taskView->renderAllTasks($this->allTasks);
   }
 
-  public function processTasksByPriority(int $prio)
+  /**
+   * Process Task By Their Priority
+   */
+  public function processTasksByPriority()
   {
-    $prio = 2;
-    $tasks = $this->taskModel->sortByPriority(2);
-    $this->taskView->renderTasksByPriority($tasks);
+    $priority = null;
+    $tasks = array();
+
+    $this->isGetRequest() ? $priority = filter_input(INPUT_GET, 'prio', FILTER_SANITIZE_STRING) : null;
+    $tasks = $this->taskModel->sortByPriority((int)$priority);
+
+    if (!is_array($tasks) || !$tasks) {
+      $this->taskView->setResponse(MessageView::$nothingReturned);
+      $this->redirect();
+
+    } else if(is_array($tasks) && $tasks) {
+      $priority === '1' ? $this->taskView->setResponse(MessageView::$priority_1) : '';
+      $priority === '2' ? $this->taskView->setResponse(MessageView::$priority_2) : '';
+      $this->taskView->renderByPriority($tasks);
+    }
   }
 
   /**
@@ -105,6 +120,11 @@ class TaskController
     return isset($_POST) && ($_SERVER['REQUEST_METHOD'] === 'POST');
   }
 
+  public function isGetRequest ()
+  {
+    return isset($_GET) && ($_SERVER['REQUEST_METHOD'] === 'GET');
+  }
+
   /**
    * Redirects user to index page if post request.
    * Hinders from double posting on refresh page.
@@ -115,5 +135,12 @@ class TaskController
             header(BASE_URL, true, 302);
             exit();
     }
+
+    if ($this->isGetRequest()) {
+            header(BASE_URL, true, 302);
+            exit();
+    }
+
+
   }
 }
