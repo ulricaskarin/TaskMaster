@@ -78,7 +78,17 @@ class TaskView
    */
   public function isHideButtonClicked() : bool
   {
-    return isset($_GET["hide"]) ? true : false;
+    return isset($_GET['hide']) ? true : false;
+  }
+
+  /**
+   * Is Sort By Priority Links clicked?
+   * When user asks for sorting of tasks by priority.
+   * @return bool - true if clicked
+   */
+  public function isSortByPriorityLinkClicked() : bool
+  {
+    return isset($_GET['prio']) ? true : false;
   }
 
   /**
@@ -179,6 +189,7 @@ class TaskView
 
     $output = null;
     $messageToUser = $this->getResponse();
+    var_dump($messageToUser);
 
     $this->isAddButtonClicked() && !Session::get(Session::$addTaskSuccess) ? $output = $this->renderAddForm($messageToUser)
     : $output = $this->hideAddForm($messageToUser);
@@ -220,9 +231,36 @@ class TaskView
       return $this->allTasks;
   }
 
-  public function renderTasksByPriority(array $tasks = [])
+  /**
+   * Render Tasks by their priority
+   * @param  array  $tasks - array of tasks from [tasks] table.
+   * @return string - HTML
+   */
+  public function renderByPriority(array $tasks = [])
   {
-    var_dump($tasks);
+    ob_start();
+
+    echo '<div class="space"></div><div class="row">';
+
+    foreach($tasks as $array =>$value) {
+        echo'
+        <div class="col-md-4">
+        <div class="task_card" >
+        <div class="card-body">
+        <h5 class="task_card_title">'.$value["title"].'</h5>
+        <h6 class="task_card_prio_'.$value["priority"].'"></h6>
+        <p class="task_card_text">'.$value["content"].'</p>
+        <a href="#" class="card-link">Edit</a>
+        <a href="#" class="card-link">Delete</a>
+        </div>
+        </div>
+        </div>';
+      }
+
+      echo '</div></div>';
+
+      $this->allTasks = ob_get_clean();
+      return $this->allTasks;
   }
 
   /**
@@ -249,7 +287,7 @@ class TaskView
     <form method="post">
     <fieldset>
     <legend></legend>
-    <p class="message" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>
+    <p class="message error" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>
     <div class="form-title">My task:</div>
 
     <label for="'.self::$title.'">Title:</label><br>
@@ -279,7 +317,11 @@ class TaskView
   {
     return
     self::renderAddButton().
-    '<p class="message" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>';
+    '<div class="space"></div>
+
+    <div class="col-md-6 mx-auto">
+    <p class="message success" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>
+    </div>';
   }
 
   /**
@@ -294,12 +336,20 @@ class TaskView
     echo
     $this->head->renderHead().
     '
-    <div class="header"><h1>'.self::$heading.'</h1></div>
+    <div class="header">
+    <h1>'.self::$heading.'</h1>
+    <div>
+    <a href="index.php">All Tasks</a>
+    <a href="?prio=1">High Priority Tasks</a>
+    <a href="?prio=2">Low Priority Tasks</a>
+    </div>
+    </div>
     <div class="subheader"></div>
 
     <div class="container">'.
 
     $this->responseView().
+
     $this->allTasks;
     //$this->footer->renderFooter();
     ob_end_flush();
