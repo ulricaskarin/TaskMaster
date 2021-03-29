@@ -120,6 +120,10 @@ class TaskController
     return isset($_POST) && ($_SERVER['REQUEST_METHOD'] === 'POST');
   }
 
+  /**
+   * Checks if GET request
+   * @return boolean - true if get
+   */
   public function isGetRequest ()
   {
     return isset($_GET) && ($_SERVER['REQUEST_METHOD'] === 'GET');
@@ -129,7 +133,7 @@ class TaskController
    * Redirects user to index page if post request.
    * Hinders from double posting on refresh page.
    */
-  public function redirect ()
+  public function redirect () // TODO Refactor
   {
     if ($this->isPostRequest()) {
             header(BASE_URL, true, 302);
@@ -140,7 +144,5 @@ class TaskController
             header(BASE_URL, true, 302);
             exit();
     }
-
-
   }
 }
