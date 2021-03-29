@@ -23,11 +23,20 @@ body {
   background-color: #ff5a79;
 }
 .space {
-  padding: 1em;
+  padding: 0.7em;
 }
 h1 {
   font-family: 'Monda', sans-serif;
   font-size: 5em;
+}
+.message {
+  text-align: center;
+}
+.success {
+  padding: 1em;
+}
+.error {
+  background-color: pink;
 }
 
 .button {
