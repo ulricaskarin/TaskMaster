@@ -112,8 +112,16 @@ class Task extends \models\Model
    return $tasks;
   }
 
-  public function sortByPriority($priority)
+  /**
+   * Sort Tasks by Priority.
+   *
+   * @param  int $priority
+   * @return array associative array with all rows & columns from [task table]
+   */
+  public function sortByPriority(int $priority)
   {
+    assert(is_int($priority));
+
     $query = "SELECT * FROM tasks WHERE priority = :priority
               ORDER BY created DESC";
 
@@ -122,10 +130,6 @@ class Task extends \models\Model
 
     $tasks = $this->db->resultSet();
 
-    if(!$tasks) {
-      //throw new Error();
-      echo 'No high priority';
-    }
     return $tasks;
   }
 }
