@@ -97,6 +97,14 @@ class Task extends \models\Model
   }
 
   /**
+   * Get Row Count
+   */
+  public function getRows()
+  {
+    return $this->db->rowCount();
+  }
+
+  /**
   * Get All Tasks
   *
   * @return array associative array with all rows & columns from [task table]
