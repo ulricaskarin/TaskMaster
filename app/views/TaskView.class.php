@@ -25,7 +25,7 @@ class TaskView
   private static $lowPrio = 'TaskView::LowPriority';
   private static $submitTask = 'TaskView::SubmitTask';
   private static $messageId = 'TaskView::Message';
-  public $allTasks ='';
+  private $allTasks ='';
 
 
   public function __construct()
@@ -204,13 +204,15 @@ class TaskView
    * @param  array  - array of tasks from [tasks] table.
    * @return string - html
    */
-  public function renderAllTasks(array $tasks = [])
+  public function renderAllTasks($tasks, $pages)
   {
     ob_start();
 
-    echo '<div class="space"></div><div class="row">';
+    echo '<div class="space">'.$pages.'</div><div class="row">';
 
     foreach($tasks as $array =>$value) {
+
+
         echo'
         <div class="col-md-4">
         <div class="task_card" >
@@ -223,7 +225,7 @@ class TaskView
         </div>
         </div>
         </div>';
-      }
+    }
 
       echo '</div></div>';
 
@@ -231,37 +233,37 @@ class TaskView
       return $this->allTasks;
   }
 
-  /**
-   * Render Tasks by their priority
-   * @param  array  $tasks - array of tasks from [tasks] table.
-   * @return string - HTML
-   */
-  public function renderByPriority(array $tasks = [])
-  {
-    ob_start();
-
-    echo '<div class="space"></div><div class="row">';
-
-    foreach($tasks as $array =>$value) {
-        echo'
-        <div class="col-md-4">
-        <div class="task_card" >
-        <div class="card-body">
-        <h5 class="task_card_title">'.$value["title"].'</h5>
-        <h6 class="task_card_prio_'.$value["priority"].'"></h6>
-        <p class="task_card_text">'.$value["content"].'</p>
-        <a href="#" class="card-link">Edit</a>
-        <a href="#" class="card-link">Delete</a>
-        </div>
-        </div>
-        </div>';
-      }
-
-      echo '</div></div>';
-
-      $this->allTasks = ob_get_clean();
-      return $this->allTasks;
-  }
+  // /**
+  //  * Render Tasks by their priority
+  //  * @param  array  $tasks - array of tasks from [tasks] table.
+  //  * @return string - HTML
+  //  */
+  // public function renderByPriority(array $tasks = [])
+  // {
+  //   ob_start();
+  //
+  //   echo '<div class="space"></div><div class="row">';
+  //
+  //   foreach($tasks as $array =>$value) {
+  //       echo'
+  //       <div class="col-md-4">
+  //       <div class="task_card" >
+  //       <div class="card-body">
+  //       <h5 class="task_card_title">'.$value["title"].'</h5>
+  //       <h6 class="task_card_prio_'.$value["priority"].'"></h6>
+  //       <p class="task_card_text">'.$value["content"].'</p>
+  //       <a href="#" class="card-link">Edit</a>
+  //       <a href="#" class="card-link">Delete</a>
+  //       </div>
+  //       </div>
+  //       </div>';
+  //     }
+  //
+  //     echo '</div></div>';
+  //
+  //     $this->allTasks = ob_get_clean();
+  //     return $this->allTasks;
+  // }
 
   /**
   * Renders Form for submit / add of new Task.
