@@ -13,12 +13,17 @@ namespace controllers;
 
 use \_storage\Session;
 use \views\MessageView;
+use \helpers\PageController as Pager;
 
 class TaskController
 {
   private $taskModel;
   private $taskView;
-  public $allTasks;
+  private $pageControl;
+  private $allTasks;
+  private $totalTasks;
+  private static $numberOfResultsPerPage = 9;
+
 
   public function __construct(\models\Task $taskModel,\views\TaskView $taskView)
   {
@@ -62,36 +67,79 @@ class TaskController
 
   /**
    * Process all tasks.
+   *
    * Asks TaskModel for all tasks in database table [tasks] and instructs
-   * TaskView to render them.
+   * and sends results to paginateTask method.
    */
   public function processAllTasks()
   {
     $this->allTasks = $this->taskModel->getAllTasks();
-    $this->taskView->renderAllTasks($this->allTasks);
+    $this->totalTasks = $this->taskModel->getRows();
+
+    $this->paginateTask($this->allTasks,
+                                  self::$numberOfResultsPerPage,
+                                  $this->totalTasks);
   }
 
   /**
    * Process Task By Their Priority
    */
-  public function processTasksByPriority()
+  public function processTasksByPriority() //TODO Fix pagination here
   {
     $priority = null;
-    $tasks = array();
 
     $this->isGetRequest() ? $priority = filter_input(INPUT_GET, 'prio', FILTER_SANITIZE_STRING) : null;
-    $tasks = $this->taskModel->sortByPriority((int)$priority);
 
-    if (!is_array($tasks) || !$tasks) {
+    $this->allTasks = $this->taskModel->sortByPriority((int)$priority);
+    $this->totalTasks = $this->taskModel->getRows();
+
+    if (!is_array($this->allTasks) || !$this->allTasks) {
       $this->taskView->setResponse(MessageView::$nothingReturned);
       $this->redirect();
 
-    } else if(is_array($tasks) && $tasks) {
+    } else if(is_array($this->allTasks) && $this->allTasks) {
       $priority === '1' ? $this->taskView->setResponse(MessageView::$priority_1) : '';
       $priority === '2' ? $this->taskView->setResponse(MessageView::$priority_2) : '';
-      $this->taskView->renderByPriority($tasks);
+
+      $this->paginateTask($this->allTasks,
+                                    self::$numberOfResultsPerPage,
+                                    $this->totalTasks);
     }
   }
+
+  /**
+   * Paginates Tasks
+   * Creates a new PageHelper in order to paginate results
+   *
+   * @param  array $resultSet    - array with all queried tasks
+   * @param  int $countPerPage   - number of results to be displayed per page
+   * @param  int $totalRows      - total rows returned from taskModel
+   */
+  public function paginateTask(array $resultSet, int $countPerPage, int $totalRows)
+  {
+
+    $pager = new \helpers\PageHelper($resultSet, $countPerPage, $totalRows);
+    $totalRows = $totalRows;
+    $result = $pager->setResults();
+    $pages = $pager->paginate();
+
+    $this->sendTasksToView($result, $pages, $totalRows);
+  }
+
+  /**
+   * Sends tasks to view
+   *
+   * @param  array $result     - array of results
+   * @param  string $pages     - string with page links
+   * @param  string $totalRows - total number of rows
+   */
+  public function sendTasksToView(array $result, $pages, $totalRows)
+  {
+    for ($i = 0; $i < $totalRows; $i++) {
+      $this->taskView->renderAllTasks($result, $pages);
+    }
+  }
+
 
   /**
    * Add task Success.
@@ -108,7 +156,6 @@ class TaskController
     $this->taskView->setResponse(MessageView::$addTaskSuccess);
 
     $this->redirect();
-
   }
 
   /**
@@ -124,7 +171,7 @@ class TaskController
    * Checks if GET request
    * @return boolean - true if get
    */
-  public function isGetRequest ()
+  public function isGetRequest () // TODO move this to RouterHelper.class?
   {
     return isset($_GET) && ($_SERVER['REQUEST_METHOD'] === 'GET');
   }
@@ -133,7 +180,7 @@ class TaskController
    * Redirects user to index page if post request.
    * Hinders from double posting on refresh page.
    */
-  public function redirect () // TODO Refactor
+  public function redirect () // TODO move this to RouterHelper.class?
   {
     if ($this->isPostRequest()) {
             header(BASE_URL, true, 302);
