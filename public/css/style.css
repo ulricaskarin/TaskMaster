@@ -39,6 +39,33 @@ h1 {
   background-color: pink;
 }
 
+.pagination {
+
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding-bottom: 2em;
+}
+.pagination a {
+  color: #000;
+  background-color: #ddd;
+  text-decoration: none;
+  padding: 1em;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+}
+.pagination a.active {
+  background-color: #ff7281;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #42ade2;
+}
+
 .button {
   display: block;
   font-family: 'Quicksand', sans-serif;
