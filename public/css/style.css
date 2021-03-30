@@ -40,8 +40,6 @@ h1 {
 }
 
 .pagination {
-
-  display: flex;
   justify-content: center;
   margin: 0;
   padding-bottom: 2em;
@@ -49,6 +47,8 @@ h1 {
 .pagination a {
   color: #000;
   background-color: #ddd;
+  font-family: 'Monda', sans-serif;
+  font-size: 1em;
   text-decoration: none;
   padding: 1em;
   height: 50px;
@@ -61,9 +61,10 @@ h1 {
   background-color: #ff7281;
   color: white;
 }
-
 .pagination a:hover:not(.active) {
   background-color: #42ade2;
+  box-shadow: #a8b6be 0px 2px 4px;
+  transform: translate3d(0px, -1px, 0px);
 }
 
 .button {
