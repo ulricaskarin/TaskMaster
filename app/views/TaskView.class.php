@@ -88,6 +88,8 @@ class TaskView
    */
   public function isSortByPriorityLinkClicked() : bool
   {
+
+
     return isset($_GET['prio']) ? true : false;
   }
 
@@ -186,10 +188,8 @@ class TaskView
    */
   public function responseView() : string
   {
-
     $output = null;
     $messageToUser = $this->getResponse();
-    var_dump($messageToUser);
 
     $this->isAddButtonClicked() && !Session::get(Session::$addTaskSuccess) ? $output = $this->renderAddForm($messageToUser)
     : $output = $this->hideAddForm($messageToUser);
@@ -202,17 +202,22 @@ class TaskView
   /**
    * Render All Tasks
    * @param  array  - array of tasks from [tasks] table.
+   * @param string  - string with pages links
    * @return string - html
    */
   public function renderAllTasks($tasks, $pages)
   {
     ob_start();
-
-    echo '<div class="space">'.$pages.'</div><div class="row">';
+    echo '
+    <nav aria-label="Page Navigation">
+      <ul class="pagination">
+        <li class="page-item">'.$pages[0].$pages[1].$pages[2].$pages[3].$pages[4].'</li>
+      </ul>
+    </nav>
+    <div class="space"></div>
+    <div class="row">';
 
     foreach($tasks as $array =>$value) {
-
-
         echo'
         <div class="col-md-4">
         <div class="task_card" >
@@ -226,44 +231,15 @@ class TaskView
         </div>
         </div>';
     }
-
-      echo '</div></div>';
-
+      echo '</div></div>
+      <nav aria-label="Page Navigation">
+        <ul class="pagination">
+          <li class="page-item">'.$pages[0].$pages[1].$pages[2].$pages[3].$pages[4].'</li>
+        </ul>
+      </nav>';
       $this->allTasks = ob_get_clean();
       return $this->allTasks;
   }
-
-  // /**
-  //  * Render Tasks by their priority
-  //  * @param  array  $tasks - array of tasks from [tasks] table.
-  //  * @return string - HTML
-  //  */
-  // public function renderByPriority(array $tasks = [])
-  // {
-  //   ob_start();
-  //
-  //   echo '<div class="space"></div><div class="row">';
-  //
-  //   foreach($tasks as $array =>$value) {
-  //       echo'
-  //       <div class="col-md-4">
-  //       <div class="task_card" >
-  //       <div class="card-body">
-  //       <h5 class="task_card_title">'.$value["title"].'</h5>
-  //       <h6 class="task_card_prio_'.$value["priority"].'"></h6>
-  //       <p class="task_card_text">'.$value["content"].'</p>
-  //       <a href="#" class="card-link">Edit</a>
-  //       <a href="#" class="card-link">Delete</a>
-  //       </div>
-  //       </div>
-  //       </div>';
-  //     }
-  //
-  //     echo '</div></div>';
-  //
-  //     $this->allTasks = ob_get_clean();
-  //     return $this->allTasks;
-  // }
 
   /**
   * Renders Form for submit / add of new Task.
@@ -273,7 +249,6 @@ class TaskView
   public function renderAddForm(string $message) : string
   {
     return
-
     '
     <div class="row">
     <div class="col-md-6 mx-auto">'
@@ -282,8 +257,6 @@ class TaskView
 
     '</div>
     </div>
-
-
     <div class="row">
     <div class="col-md-6 mx-auto">
     <form method="post">
@@ -313,6 +286,7 @@ class TaskView
 
   /**
    * Hides Form for adding of Task.
+   *
    * @return string
    */
   public function hideAddForm($message) : string
@@ -320,7 +294,6 @@ class TaskView
     return
     self::renderAddButton().
     '<div class="space"></div>
-
     <div class="col-md-6 mx-auto">
     <p class="message success" id="'. self::$messageId .'">'.htmlspecialchars($message).'</p>
     </div>';
@@ -329,8 +302,6 @@ class TaskView
   /**
    * Renders complete page to user.
    * View changes due to user action.
-   *
-   * @return
    */
   public function renderPage() // TODO Fix footer bug!
   {
@@ -347,13 +318,11 @@ class TaskView
     </div>
     </div>
     <div class="subheader"></div>
-
     <div class="container">'.
 
     $this->responseView().
-
     $this->allTasks;
-    //$this->footer->renderFooter();
+    $this->footer->renderFooter();
     ob_end_flush();
   }
 }
