@@ -18,16 +18,6 @@ class PageHelper
   private $resultSet;
 
   /**
-   * Number of results to be listed per page
-   */
-  public $resultsPerPage;
-
-  /**
-   * The total count of results within a resultSet.
-   */
-  public $resultCount;
-
-  /**
    * Number of Pages to display (i.e 1, 3, 4, ...)
    * @var [type]
    */
@@ -42,6 +32,16 @@ class PageHelper
    * Current page
    */
   private $currentPage;
+
+  /**
+   * Number of results to be listed per page
+   */
+  public $resultsPerPage;
+
+  /**
+   * The total count of results within a resultSet.
+   */
+  public $resultCount;
 
   /**
    * Static Properties
@@ -86,7 +86,8 @@ class PageHelper
    */
   private function getCurrentPage()
   {
-    $this->isGetRequest() && isset($_GET[self::$page]) ? $currentPage = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING) : $currentPage = 1;
+
+    $this->isGetRequest() && isset($_GET[self::$page]) ? $currentPage = filter_input(INPUT_GET, self::$page, FILTER_SANITIZE_STRING) : $currentPage = 1;
 
     $currentPage < 1 ? $currentPage = 1 : '';
 
@@ -94,6 +95,58 @@ class PageHelper
 
 		return $currentPage;
   }
+
+  /**
+   * Get Previous Page
+   * @return string - Link to previous page
+   */
+  public function getPreviousPage() {
+
+    $previous = '';
+
+    $this->getCurrentPage() > 1 ? $previous = '<a href="'.$_SERVER['PHP_SELF'].self::$url.($this->getCurrentPage()-1).'">< Prev </a>' : $previous = '';
+
+		return $previous;
+	}
+
+  /**
+   * Get Next Page
+   * @return string - Link to next page
+   */
+  public function getNextPage() {
+
+    $next = '';
+
+    $this->getCurrentPage() < $this->numberOfPages ? $next = '<a href="'.$_SERVER['PHP_SELF'].self::$url.($this->getCurrentPage()+1).'"> Next > </a>' : $next = '';
+
+		return $next;
+	}
+
+  /**
+   * Get First Page
+   * @return string - Link to first Page
+   */
+  public function getFirstPage() {
+
+    $first = '';
+
+    $this->getCurrentPage() != 1 ? $first = '<a href="'.$_SERVER['PHP_SELF'].self::$url.'"><< First</a>' : $first = '';
+
+		return $first;
+	}
+
+  /**
+   * Get Last Page
+   * @return string - Link to last page
+   */
+  public function getLastPage() {
+
+    $last = '';
+
+    $this->getCurrentPage() != $this->numberOfPages ? $last = '<a href="'.$_SERVER['PHP_SELF'].self::$url.$this->numberOfPages.'"> Last >></a>' : $last = '';
+
+		return $last;
+	}
 
   /**
    * Gets Offset
@@ -116,11 +169,19 @@ class PageHelper
 
 			if(($page <= $this->numberOfPages) && ($page > 0)) {
 
-				if($this->resultCount <= $this->resultsPerPage) {$pages .= '';}
+				if($this->resultCount <= $this->resultsPerPage) {
 
-				elseif($page == $this->currentPage) {$pages .= $page."\n";}
+          $pages .= '';
+        }
 
-				else {$pages .= '<a href="'.$_SERVER['PHP_SELF'].self::$url. $page.'">'.$page.'</a>'."\n";}
+				else if($page == $this->currentPage) {
+
+          $pages .= '<a class= "active" title="Current Page '.$page.'" href="'.$_SERVER['PHP_SELF'].self::$url. $page.'">'.$page.'</a>'."\n";
+        }
+
+				else {
+          $pages .= '<a title="Page '.$page.'"href="'.$_SERVER['PHP_SELF'].self::$url. $page.'">'.$page.'</a>'."\n";
+        }
 			}
 		}
     return $pages;
