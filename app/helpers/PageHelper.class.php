@@ -104,7 +104,7 @@ class PageHelper
 
     $previous = '';
 
-    $this->getCurrentPage() > 1 ? $previous = '<a href="'.$_SERVER['PHP_SELF'].self::$url.($this->getCurrentPage()-1).'">< Prev </a>' : $previous = '';
+    $this->getCurrentPage() > 1 ? $previous = '<a title="Previous" href="'.$_SERVER['PHP_SELF'].self::$url.($this->getCurrentPage()-1).'"> < </a>' : $previous = '';
 
 		return $previous;
 	}
@@ -117,7 +117,7 @@ class PageHelper
 
     $next = '';
 
-    $this->getCurrentPage() < $this->numberOfPages ? $next = '<a href="'.$_SERVER['PHP_SELF'].self::$url.($this->getCurrentPage()+1).'"> Next > </a>' : $next = '';
+    $this->getCurrentPage() < $this->numberOfPages ? $next = '<a title="Next" href="'.$_SERVER['PHP_SELF'].self::$url.($this->getCurrentPage()+1).'"> > </a>' : $next = '';
 
 		return $next;
 	}
@@ -130,7 +130,7 @@ class PageHelper
 
     $first = '';
 
-    $this->getCurrentPage() != 1 ? $first = '<a href="'.$_SERVER['PHP_SELF'].self::$url.'"><< First</a>' : $first = '';
+    $this->getCurrentPage() != 1 ? $first = '<a title="First" href="'.$_SERVER['PHP_SELF'].self::$url.'"> << </a>' : $first = '';
 
 		return $first;
 	}
@@ -143,7 +143,7 @@ class PageHelper
 
     $last = '';
 
-    $this->getCurrentPage() != $this->numberOfPages ? $last = '<a href="'.$_SERVER['PHP_SELF'].self::$url.$this->numberOfPages.'"> Last >></a>' : $last = '';
+    $this->getCurrentPage() != $this->numberOfPages ? $last = '<a title="Last" href="'.$_SERVER['PHP_SELF'].self::$url.$this->numberOfPages.'"> >> </a>' : $last = '';
 
 		return $last;
 	}
