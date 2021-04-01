@@ -76,9 +76,11 @@ class TaskController
     $this->allTasks = $this->taskModel->getAllTasks();
     $this->totalTasks = $this->taskModel->getRows();
 
-    $this->paginateTask($this->allTasks,
-                                  self::$numberOfResultsPerPage,
-                                  $this->totalTasks);
+    if (is_array($this->allTasks) || !empty($this->allTasks)) {
+      $this->paginateTask($this->allTasks,
+                                    self::$numberOfResultsPerPage,
+                                    $this->totalTasks);
+    }
   }
 
   /**
@@ -93,17 +95,16 @@ class TaskController
     $this->allTasks = $this->taskModel->sortByPriority((int)$priority);
     $this->totalTasks = $this->taskModel->getRows();
 
-    if (!is_array($this->allTasks) || !$this->allTasks) {
-      $this->taskView->setResponse(MessageView::$nothingReturned);
-      $this->redirect();
-
-    } else if(is_array($this->allTasks) && $this->allTasks) {
+    if(is_array($this->allTasks) && !empty($this->allTasks)) {
       $priority === '1' ? $this->taskView->setResponse(MessageView::$priority_1) : '';
       $priority === '2' ? $this->taskView->setResponse(MessageView::$priority_2) : '';
 
       $this->paginateTask($this->allTasks,
-                                    self::$numberOfResultsPerPage,
-                                    $this->totalTasks);
+                          self::$numberOfResultsPerPage,
+                          $this->totalTasks);
+    } else {
+      $this->taskView->setResponse(MessageView::$nothingReturned); //TODO keep?
+      //$this->redirect();
     }
   }
 
@@ -117,11 +118,17 @@ class TaskController
    */
   public function paginateTask(array $resultSet, int $countPerPage, int $totalRows)
   {
-
     $pager = new \helpers\PageHelper($resultSet, $countPerPage, $totalRows);
+
     $totalRows = $totalRows;
+
     $result = $pager->setResults();
-    $pages = $pager->paginate();
+
+    $pages = [$pager->getFirstPage(),
+              $pager->getPreviousPage(),
+              $pager->paginate(),
+              $pager->getNextPage(),
+              $pager->getLastPage()];
 
     $this->sendTasksToView($result, $pages, $totalRows);
   }
@@ -130,37 +137,33 @@ class TaskController
    * Sends tasks to view
    *
    * @param  array $result     - array of results
-   * @param  string $pages     - string with page links
+   * @param  array $pages     - string with page links
    * @param  string $totalRows - total number of rows
    */
-  public function sendTasksToView(array $result, $pages, $totalRows)
+  public function sendTasksToView(array $result, array $pages, int $totalRows)
   {
     for ($i = 0; $i < $totalRows; $i++) {
       $this->taskView->renderAllTasks($result, $pages);
     }
   }
 
-
   /**
    * Add task Success.
+   *
    * On successful add of task ->
    * -> instructs TaskView to reset form.
-   * -> sets Success Session.
    * -> redirects user.
    */
   public function addTaskSuccess()
   {
     $this->taskView->resetForm();
-
-    Session::set(Session::$addTaskSuccess, 'Success');
-    $this->taskView->setResponse(MessageView::$addTaskSuccess);
-
     $this->redirect();
   }
 
   /**
    * Checks if POST request
-   * @return boolean - true if post
+   *
+   * @return boolean - true if post request
    */
   public function isPostRequest ()
   {
@@ -169,7 +172,8 @@ class TaskController
 
   /**
    * Checks if GET request
-   * @return boolean - true if get
+   *
+   * @return boolean - true if get request
    */
   public function isGetRequest () // TODO move this to RouterHelper.class?
   {
